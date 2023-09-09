@@ -29,6 +29,9 @@ public class KameraTakip : MonoBehaviour
 
     public Quaternion nickAci;
 
+    [Header("Shake Degerler")]
+    public Vector4 shake;
+
     private void Awake()
     {
         kt = this;
@@ -78,7 +81,7 @@ public class KameraTakip : MonoBehaviour
 
     public void Shake()
     {
-        degerler.ShakeOnce(3, 3, .1f, .5f);
+        degerler.ShakeOnce(shake.x, shake.y, shake.z, shake.w);
     }
 }
 

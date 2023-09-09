@@ -16,8 +16,9 @@ public class OzellikDegis : MonoBehaviour
     public List<GameObject> silahlar;
     public List<GameObject> petler;
     public List<GameObject> skiller;
+    public List<GameObject> kitaplar;
 
-    GameObject acikZirh, acikSilah, acikPet, acikSkill;
+    GameObject acikZirh, acikSilah, acikPet, acikSkill, acikKitap;
 
     private void Start()
     {
@@ -39,7 +40,7 @@ public class OzellikDegis : MonoBehaviour
         acikZirh?.ObjeKapa();
         acikZirh = zirhlar[(int)seviye];
         acikZirh?.ObjeAc();
-        oyuncuStat.ZirhSeviyeAta((int)seviye);
+        oyuncuStat.ZirhSeviyeAta((int)seviye + 1);
     }
 
     public void SilahAc(OzellikSeviye seviye)
@@ -47,7 +48,7 @@ public class OzellikDegis : MonoBehaviour
         acikSilah?.ObjeKapa();
         acikSilah = silahlar[(int)seviye];
         acikSilah?.ObjeAc();
-        oyuncuStat.SilahSeviyeAta((int)seviye);
+        oyuncuStat.SilahSeviyeAta((int)seviye + 1);
     }
 
     public void PetAc(OzellikSeviye seviye)
@@ -57,7 +58,7 @@ public class OzellikDegis : MonoBehaviour
         acikPet?.ObjeKapa();
         acikPet = petler[(int)seviye];
         acikPet?.ObjeAc();
-        oyuncuStat.PetSeviyeAta((int)seviye);
+        oyuncuStat.PetSeviyeAta((int)seviye + 1);
 
         saldiri.petAktif = true;
     }
@@ -70,6 +71,11 @@ public class OzellikDegis : MonoBehaviour
         acikSkill = skiller[(int)seviye];
         acikSkill?.ObjeAc();
         //oyuncuStat.s((int)seviye);
+
+
+        acikKitap?.ObjeKapa();
+        acikKitap = kitaplar[(int)seviye];
+        acikKitap?.ObjeAc();
     }
 
 }

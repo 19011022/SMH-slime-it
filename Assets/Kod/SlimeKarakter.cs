@@ -52,10 +52,27 @@ public class SlimeKarakter : MonoBehaviour
         acikYuz = mutlu;
     }
 
+    float timer = 0;
+
     private void Update()
     {
         canvas.rotation = KameraTakip.kt.nickAci;
         canvas.localScale = Vector3.one * 0.005f * KameraTakip.kt.canCancasScale / transform.localScale.x;
+
+        if (!hayatta)
+        {
+            timer += Time.deltaTime;
+
+            if(timer > 5)
+            {
+                GetComponent<Rigidbody>().isKinematic = true;
+                transform.position += Vector3.down * .4f * Time.deltaTime;
+            }
+            if(timer > 8)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
     public void OyuncuyaVur()
@@ -82,6 +99,7 @@ public class SlimeKarakter : MonoBehaviour
 
         if (can <= 0)
         {
+            hayatta = false;
             can = 0;
             GUIGuncelle();
             SlimeOlme();
@@ -126,7 +144,6 @@ public class SlimeKarakter : MonoBehaviour
         for (int i = itemParent.childCount - 1; i >= 0; i--)
         {
             Transform altParent = new GameObject().transform;
-            altParent.parent = itemParent;
             altParent.position = transform.position;
             altParent.eulerAngles = Vector3.up * Random.Range(0, 360);
 
@@ -134,7 +151,9 @@ public class SlimeKarakter : MonoBehaviour
             Transform itemT = itemParent.GetChild(0);
             itemT.parent = altParent;
             itemT.gameObject.ObjeAc();
-            itemT.GetComponent<DroppedItem>().ItemDrop();
+            itemT.GetComponent<DroppedItem>().ItemDrop(slimeTur);
+
+            altParent.parent = null;
         }
     }
 

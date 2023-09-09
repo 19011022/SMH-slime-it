@@ -32,8 +32,11 @@ public class Karakter : MonoBehaviour
 
 
     //envanter
+    public OzellikDegis ozellik;
     public List<Item> items;
     public GameObject itemEtkilesimPanel;
+    public Image itemEtkilesimImage;
+
 
     [Header("Materyal")]
     public Animation matAnim;
@@ -48,7 +51,7 @@ public class Karakter : MonoBehaviour
 
     void Start()
     {
-        maxCan = DefaultDegerler.DEFAULT_CAN; 
+        maxCan = DefaultDegerler.DEFAULT_CAN;
         sans = DefaultDegerler.DEFAULT_SANS;
         hareketHizi = DefaultDegerler.DEFAULT_HAREKETHIZI;
         saldiriHizi = DefaultDegerler.DEFAULT_SALDIRIHIZI;
@@ -87,6 +90,9 @@ public class Karakter : MonoBehaviour
     void OyuncuOlum()
     {
         BaseDon();
+        can = maxCan;
+        GUIGuncelle();
+        OyuncuSaldiri.saldiri.OyuncuOlum();
     }
 
     public void GUIGuncelle()
@@ -98,30 +104,57 @@ public class Karakter : MonoBehaviour
 
     public void SlimeSaldirdi(float hasar)
     {
+        KameraTakip.kt.Shake();
         CanDegis(-hasar);
         matAnim.AnimasyonuKesinBaslat("OyuncuMatCanAzalma");
     }
 
     //item
-    public void ChangeItem(GameObject itemObje)
+    public void ChangeItem()
     {
-        Item newItem = itemObje.GetComponent<DroppedItem>().item;
-        items[(int)newItem.itemType] = newItem;
+        GameObject itemObje = acikItem.gameObject;
+        Item item = itemObje.GetComponent<DroppedItem>().item;
+        //items[(int)newItem.itemType] = newItem;
+
+        if (item.itemType == ItemType.Weapon) ozellik.SilahAc((OzellikSeviye)item.level - 1);
+        else if (item.itemType == ItemType.Armour) ozellik.ZirhAc((OzellikSeviye)item.level - 1);
+        else if (item.itemType == ItemType.Pet) ozellik.PetAc((OzellikSeviye)item.level - 1);
+        else if (item.itemType == ItemType.Book) ozellik.SkillAc((OzellikSeviye)item.level - 1);
+
         print("item degisti");
         //yeni itemi ele al, eldekini yere at
 
+        itemObje.ObjeSil();
         itemEtkilesimPanel.ObjeKapa();
+        acikItem = null;
     }
 
     // Burns the currently equipped item
-    public void BurnItem(GameObject itemObje)
+    public void BurnItem()
     {
+        GameObject itemObje = acikItem.gameObject;
         Item newItem = itemObje.GetComponent<DroppedItem>().item;
         GUICorePanel.gUICorePanel.CoreMiktar((Element)newItem.itemType, UnityEngine.Random.Range(10, 16) * newItem.level);
         itemObje.ObjeSil();
 
         itemEtkilesimPanel.ObjeKapa();
+        acikItem = null;
     }
+
+    Transform acikItem;
+
+    void ItemPanelAc()
+    {
+        print(acikItem.GetComponent<DroppedItem>().item.level);
+        itemEtkilesimPanel.ObjeAc();
+        itemEtkilesimImage.sprite = acikItem.GetComponent<DroppedItem>().item.sprite;
+    }
+    void ItemPanelKapa()
+    {
+        itemEtkilesimPanel.ObjeKapa();
+        acikItem = null;
+    }
+
 
     //trigger fn
     private void OnTriggerEnter(Collider other)
@@ -133,7 +166,11 @@ public class Karakter : MonoBehaviour
         }
         else if (other.CompareTag("Item"))
         {
-            itemEtkilesimPanel.ObjeAc();
+            if (acikItem == null)
+            {
+                acikItem = other.transform;
+                ItemPanelAc();
+            }
         }
         else if (other.CompareTag("Deniz"))
         {
@@ -146,6 +183,15 @@ public class Karakter : MonoBehaviour
         else if (other.CompareTag("Info"))
         {
             OyunKontrol.ok.infoPanel.ObjeAc();
+        }
+        else if (other.CompareTag("CoreDrop"))
+        {
+            int seviye = other.GetComponent<DroppedItem>().item.level;
+            Element itemTur = other.GetComponent<DroppedItem>().element;
+
+            GUICorePanel.gUICorePanel.CoreMiktar(itemTur, seviye * seviye * 10);
+            other.tag = "Untagged";
+            other.gameObject.ObjeSil();
         }
     }
 
@@ -163,6 +209,11 @@ public class Karakter : MonoBehaviour
         else if (other.CompareTag("Info"))
         {
             OyunKontrol.ok.infoPanel.ObjeKapa();
+        }
+        else if (other.CompareTag("Item"))
+        {
+            if (acikItem == other.transform)
+                ItemPanelKapa();
         }
     }
 

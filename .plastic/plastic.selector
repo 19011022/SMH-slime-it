@@ -1,0 +1,4 @@
+repository "SlimeIt@DOAL_Games_2@cloud"
+  path "/"
+    br "/main"
+    co "/main"

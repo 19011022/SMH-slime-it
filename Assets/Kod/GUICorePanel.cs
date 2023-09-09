@@ -42,6 +42,11 @@ public class GUICorePanel : MonoBehaviour
 
     public void CoreMiktar(Element e, int miktar)
     {
+        if(!PlayerPrefs.HasKey(DefaultDegerler.PP_ELEMENT_ADLARI[(int)e - 1]))
+        {
+            PlayerPrefs.SetInt(DefaultDegerler.PP_ELEMENT_ADLARI[(int)e - 1], 0);
+        }
+
         int mevcut = PlayerPrefs.GetInt(DefaultDegerler.PP_ELEMENT_ADLARI[(int)e-1]);
         PlayerPrefs.SetInt(DefaultDegerler.PP_ELEMENT_ADLARI[(int)e-1], mevcut + miktar);
         coreTextList[(int)e-1].text = "" + (mevcut + miktar);

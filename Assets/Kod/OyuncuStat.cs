@@ -6,8 +6,12 @@ public class OyuncuStat : MonoBehaviour
 {
     public void ZirhSeviyeAta(int seviye)
     {
-        Karakter.karakter.maxCan = DefaultDegerler.DEFAULT_CAN * seviye * seviye;
+        int oncekiCan = Karakter.karakter.maxCan;
+        int yeniCan = DefaultDegerler.DEFAULT_CAN * seviye * seviye;
 
+        Karakter.karakter.maxCan = yeniCan;
+        Karakter.karakter.can += (yeniCan - oncekiCan);
+        Karakter.karakter.GUIGuncelle();
     }
     public void SilahSeviyeAta(int seviye)
     {

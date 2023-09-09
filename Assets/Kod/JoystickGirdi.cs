@@ -95,7 +95,7 @@ public class JoystickGirdi : MonoBehaviour
         {
             JoyVektoru = Vector2.zero;
             ikincikNokta = new Vector2(Screen.width / 2, Screen.height / 4);
-            iki.localPosition = (ikincikNokta - fark) / OyunKontrol.ekranOrani;
+            //iki.localPosition = (ikincikNokta - fark) / OyunKontrol.ekranOrani;
             //JoyAcKapa(false);
         }
         if(JoyVektoru == Vector2.zero)

@@ -13,7 +13,6 @@ public class OyuncuSaldiri : MonoBehaviour
     [Header("Inverse K.")]
     public Transform spineT;
 
-
     [Header("Pet")]
     public bool petAktif;
     public Transform pet;
@@ -69,6 +68,18 @@ public class OyuncuSaldiri : MonoBehaviour
             saldiriSlime.GetComponent<SlimeHareket>().SlimeVuruldu();
     }
 
+    public void OyuncuOlum()
+    {
+        yakinSlimelar.Clear();
+
+        if (saldiriSlime)
+        {
+            saldiriSlime.GetComponent<SlimeHareket>().OyuncuGitti();
+            PetSaldiriBitir();
+            saldiriSlime = null;
+        }
+    }
+
     private void LateUpdate()
     {
         hareket.vuruyor = saldiriSlime != null;
@@ -115,7 +126,7 @@ public class OyuncuSaldiri : MonoBehaviour
     }
     public void PetSaldiriBitir()
     {
-        if (petAktif)
+        if (petAktif && petCor != null)
             StopCoroutine(petCor);
     }
 
