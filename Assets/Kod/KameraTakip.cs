@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using EZCameraShake;
-using UnityEditor.VersionControl;
+//using UnityEditor.VersionControl;
 
 public class KameraTakip : MonoBehaviour
 {
